@@ -1,0 +1,774 @@
+#include<iostream>
+#include<fstream>
+#include<cstring>
+#include <string>
+using namespace std;
+
+const int numOfProduct=200;
+int counter=0;                            //used for counting number of products.
+double total=0;                           //used for getting the totoal.
+double sum=0;                              //used for summmation.
+float discount;                         
+double avgPrice=0;
+long double maxi;                             //used to get the most expensive item price .
+string maxii;                              //used to get most expensive item name.
+long double mini;                             //used to get the least expensive item price.
+string minii;                             //used to get the lest expensive item name.
+string tmp;                               //used to process chunks of data to the file.
+
+
+
+struct conInfo                                   //all things related to the consumer.
+{
+	char  consumerName[20];
+	string dateOfVisit;
+	 
+	string address;
+	int phoneNumber;     
+	string productName[numOfProduct];
+	string purchaseDate;
+   long double productPrice[numOfProduct];            
+}consumers;
+char fileName[20];                                //used to indicate the file name which same as the consumer.
+char fileDisplayName[20];
+
+
+
+void getAllInfo();	                                               //function used to get consumer related info.                                              
+void copyInfoTOFile();                                            //function used to copy the info to a file created and name as the consumer name.
+void colorChanger();                                             //function to change the color of the background and text.
+void processingData();                                          //function used to do the nessary operations.
+void recordOfConsumers();                                      //function used to keep a record of consumers name.
+void intilaizer();                                            //function used to return all global values to zero when needed.
+void displayInfoFile();                                      //function used to display the info presented in the file.
+void dislaySpecifiInfoFile(char NameToSearch[]);            //function used to display a specific info file.
+void displayRecordsFile();                                 //function used to display records of consumers.
+void deleteAllConsumersFiles();                           //function used to delete previous files of consumers.
+void clearRecord();                                      //function used after deleteAllConsumersFiles to delete data of conusmer in record file.
+string deleteSpecifiRecord(string NameToDelete);        //function used to delete a particular record.
+void updateRecordAfterDelete(string NameToDelete);     //function used to update consumer record after deleting particular name.
+
+main()
+{
+	counter=0;
+	char NameToSearch[20];
+	string NameToDelete;
+	string deletedName;
+cout<<endl;
+	cout<<"   *                   *     * * * * * * * * *       *                              * * * * * * * * *     *                           *     * * * * * * * * *                           "<<endl;                                                                
+	cout<<"   *                   *     *                       *                          *                         * *                       * *     *                                           "<<endl;
+    cout<<"   *                   *     *                       *                        *                           *   *                   *   *     *                                           "<<endl; 
+	cout<<"   *                   *     *                       *                       *                            *     *               *     *     *                                           "<<endl;
+	cout<<"   *                   *     *                       *                      *                             *       *           *       *     *                                           "<<endl;
+	cout<<"   *                   *     *                       *                      *                             *         *       *         *     *                                           "<<endl;
+	cout<<"   *         *         *     * * * * * * * * *       *                      *                             *           *   *           *     * * * * * * * * *                           "<<endl;
+	cout<<"   *       *   *       *     *                       *                      *                             *             *             *     *                                           "<<endl;
+	cout<<"   *     *       *     *     *                       *                       *                            *                           *     *                                           "<<endl;
+	cout<<"   *   *           *   *     *                       *                         *                          *                           *     *                                           "<<endl;
+	cout<<"   * *               * *     *                       *                           *                        *                           *     *                                           "<<endl;
+	cout<<"   *                   *     * * * * * * * * *       * * * * * * * * *              * * * * * * * * *     *                           *     * * * * * * * * *                           "<<endl;                                                     
+
+
+	cout<<endl<<endl<<endl;
+
+	               
+				           //this section is used as a menu of choices.                                                                                                                                                                
+	    char choice;
+	    char choice2;
+		char main;
+		
+		cout<<"Press (m) to enter main menu "<<endl;
+		cin>>main;
+		if (main == 'm')
+		{
+	do {
+		
+
+			system("cls");	
+		cout<<"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ MAIN MENU @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@";	
+		cout<<"\n@                                                                           @";   
+		cout<<"\n@          01. Change font and background color                             @"; 
+		cout<<"\n@                                                                           @"; 
+		cout<<"\n@          02. Add new consumer info                                        @";
+		cout<<"\n@                                                                           @"; 
+		cout<<"\n@          03. Display info of current consumer                             @";
+		cout<<"\n@                                                                           @"; 
+		cout<<"\n@          04. Show a list of entered consumers                             @";
+		cout<<"\n@                                                                           @"; 
+		cout<<"\n@          05. Search for a specific consumer info                          @";
+		cout<<"\n@                                                                           @";
+		cout<<"\n@          06. delete specific consumers data                               @"; 
+		cout<<"\n@                                                                           @";
+		cout<<"\n@          07. delete all consumers data                                    @";
+		cout<<"\n@                                                                           @"; 
+		cout<<"\n@          08. followed by enter botton twice to exit                       @";
+		cout<<"\n@                                                                           @";
+		cout<<"\n@         Press the coressponding command number followed by enter          @";
+		cout<<"\n@                                                                           @";
+		cout<<"\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"<<endl;
+		
+		
+		cin>>choice;
+
+		
+		switch (choice)
+		{
+			case '1':
+			system("cls");
+			colorChanger();
+				break;
+		
+		
+			
+			case '2':
+			system("cls");
+			intilaizer();
+			getAllInfo();
+			processingData();
+			system("cls");
+			cout<<"\n\n////////////////////////////////////////////////";
+			cout<<"\n/    DO you want entered info to be saved      /";                         //used to know wether to save info to a file or no.
+			cout<<"\n////////////////////////////////////////////////";
+			
+			cout<<"\n\n___________________________________\n";
+			cout<<" Enter    (y:for yes   n:for no) ";
+			cout<<"\n___________________________________\n";
+			cin>>choice2; 
+			cout<<"-----------------------------------";
+			if (choice2 == 'y')
+			{ system("cls");
+			   copyInfoTOFile();
+			   recordOfConsumers();                                                                                              
+		} break;
+		
+		case '3':
+	          	system("cls");
+	          	 displayInfoFile();
+			break; 
+			
+	
+		case '4':system("cls");
+		         cout<<"Number 4:"<<endl;
+		         system("cls");
+				displayRecordsFile();
+				break;
+					
+		case '5': 
+		           system("cls");
+		           dislaySpecifiInfoFile(NameToSearch);
+		           break;
+		           
+		case '6':system("cls");
+		deletedName=deleteSpecifiRecord(NameToDelete);
+		updateRecordAfterDelete(deletedName);
+			    break;
+		
+		case '7':system("cls");
+		deleteAllConsumersFiles();
+		clearRecord();
+		break;
+		
+		default:  cout<<endl; 
+	};cin.ignore();
+		cin.get();		
+		}while(choice!='8');
+
+
+
+	
+	
+}
+else
+{
+	cout<<"\n\n//////////////////////////////////////////";
+	cout<<"\n/   You are exiting the program ...      /";
+	cout<<"\n//////////////////////////////////////////";
+}
+}
+		
+		
+		
+	
+	
+	
+	
+	
+	
+///////////////////////////////////////////////////////////////////////// colorChanger ///////////////////////////////////////////////////////////////////////////	
+
+
+
+void colorChanger()
+{
+		system("cls");
+	char color;
+	l:
+	cout<<"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ Change Background @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@";                   //choices for the user to choose from.
+	cout<<"\n@                                                                              @";
+	cout<<"\n@             01. for white background and black text                          @";
+	cout<<"\n@                                                                              @";
+	cout<<"\n@             02. for grey background and black text                           @";
+	cout<<"\n@                                                                              @";
+	cout<<"\n@             03. for white background and purple text                         @";
+	cout<<"\n@                                                                              @";
+	cout<<"\n@             04. for white background and green text                          @";
+	cout<<"\n@                                                                              @";
+	cout<<"\n@             05. for white background and grey text                           @";
+	cout<<"\n@                                                                              @";
+	cout<<"\n@             06. for blue background and white text                           @";
+	cout<<"\n@                                                                              @";
+	cout<<"\n@             07. for green backgound and black text                           @";
+	cout<<"\n@                                                                              @";
+	cout<<"\n@             08. twice to exit the program                                    @";
+	cout<<"\n@                                                                              @";
+	cout<<"\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n";
+	cin>>color;                                                              //entering user choice.
+	
+	
+	switch (color)
+		{
+			case '1': system("color f0");
+			break;
+			
+			case '2': system("color 70");
+			break;
+			
+			case '3': system("color f5");
+			break;
+			
+			case '4': system("color f2");
+			break;
+			
+			case '5': system("color f7");
+			break;
+			
+		   case '6': system("color 1f");
+		   break;
+		   
+		   case '7': system("color 20");
+		   break;
+		   
+		   case '8':break;
+		   
+		   default :
+		   	cout<<"\n\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!";
+		   cout<<"\n!  Wrong command entered reenter you choice   !";
+		   cout<<"\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!";
+		   
+		};
+	
+	
+		
+		}
+		
+
+
+///////////////////////////////////////////////////////////////////////// intilaizer ///////////////////////////////////////////////////////////////////////////	
+                  
+
+void intilaizer()
+{
+ sum=0;	
+ total=0;
+ avgPrice=0;
+ counter=0;
+}
+
+
+ 
+ 
+ ///////////////////////////////////////////////////////////////////////// getAllInfo ///////////////////////////////////////////////////////////////////////////
+ 
+void getAllInfo()
+{
+	
+		
+ 
+int npb;                                       //stands for number of products bought.
+
+
+	 	 
+	cout<<"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ New Cosumer @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"<<endl<<endl;
+	
+	npb=0;
+	cout<<"\n___________________________________\n";
+
+	cout<<"Enter the consumer first Name :                                     "<<endl;                    //acquirirng consumer name.
+		cout<<"___________________________________\n";
+	cin>>consumers.consumerName;
+	cout<<"-----------------------------------\n";
+    
+    cout<<"\n___________________________________\n";
+	cout<<"Enter today's date :                                                "<<endl;
+	cout<<"___________________________________\n";
+	cin>>consumers.dateOfVisit;
+	cout<<"-----------------------------------\n";
+	
+cout<<"\n___________________________________\n";
+	cout<<"Enter the address :                                                 "<<endl;
+	cout<<"___________________________________\n";
+      cin>>consumers.address;
+      cout<<"-----------------------------------\n";
+      
+      cout<<"\n___________________________________\n";
+	cout<<"Enter the phone number :                                            "<<endl;                           //used to get the consumer phone number.
+	cout<<"___________________________________\n";
+	cin>>consumers.phoneNumber;
+	cin.clear();
+	cin.ignore(200,'\n');
+	cout<<"-----------------------------------\n";	
+	
+	
+	system("cls");
+	cout<<"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ Product info @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"<<endl<<endl;
+	cout<<endl;
+	cout<<"//////////////////////////////////////////////////////////////////////////////////";
+	cout<<"\n/                                                                                /";
+	cout<<"\n/   (If you finished adding product name and price press 0 followed by enter )   /";                           //used to stop the loop.
+	cout<<"\n/                                                                                /";
+    cout<<"\n//////////////////////////////////////////////////////////////////////////////////\n";
+	int i=0;
+	do
+	{
+	
+	cout<<"\n___________________________________\n";
+	cout<<"Enter the product name :"<<endl;
+	cout<<"___________________________________\n";
+	cin>>consumers.productName[i];
+	cout<<"-----------------------------------\n";
+	
+	
+	if (consumers.productName[i] != "0")
+	{
+		
+	cout<<"\n___________________________________\n";	
+	cout<<"Enter the product price :"<<endl;
+	cout<<"___________________________________\n";
+	cin>>consumers.productPrice[i];
+	cin.clear();
+	cin.ignore(200,'\n');
+	sum+=consumers.productPrice[i];                  //used to find the sum.
+	counter++;
+	i++;
+	cout<<"-----------------------------------\n";	
+}
+else 
+{ 
+break;
+}
+}
+while (consumers.productName[i] != "0");               //used to stop the counter .
+
+
+char choice;
+r:
+cout<<"\n////////////////////////////////////////////////////////////////////////////////////";
+cout<<"\n/                                                                                  /";	
+cout<<"\n/     Enter wether there is a discount or no        (y:for yes   n:for no)         /";
+cout<<"\n/                                                                                  /";
+cout<<"\n////////////////////////////////////////////////////////////////////////////////////\n";
+cin>>choice;
+
+switch (choice)
+{
+	case 'y':{
+	cout<<"\n___________________________________\n";
+	cout<<" Enter amount of discount :"<<endl;
+	cout<<"___________________________________\n";
+	          cin>>discount;
+	cout<<"-----------------------------------\n";
+		       break;
+	}
+	case 'n':break;
+	
+	default: 
+	{
+    cout<<"\n\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!";
+	cout<<"\n!   You entered a wrong command     ! ";                           //used incase of a  wrong command.
+	cout<<"\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n\n";
+	goto r;
+}
+}
+		
+}
+
+
+
+
+///////////////////////////////////////////////////////////////////////// processingData ///////////////////////////////////////////////////////////////////////////
+
+
+
+void processingData()                        //it is used to process the data taken form the info function
+{
+	total=sum;
+	total=total-total*discount/100;
+	avgPrice=sum/counter;
+	
+	mini=consumers.productPrice[0];
+	maxi=consumers.productPrice[0];
+	
+	for(int i=0;i<counter;i++)
+	{
+		if (consumers.productPrice[i] <= mini)
+	{
+		mini=consumers.productPrice[i];                                 //used to keep the lowest value
+		minii=consumers.productName[i];
+	}
+	if (consumers.productPrice[i] >= maxi)
+	{
+		maxi=consumers.productPrice[i];                                  //used to keep the highest value.
+		maxii=consumers.productName[i];
+	}
+}
+	
+	
+}
+
+
+
+///////////////////////////////////////////////////////////////////////// displayInfoFile ///////////////////////////////////////////////////////////////////////////
+
+
+void displayInfoFile()                                    //function used to display info in the file of current consumer.
+{
+	
+		
+	strcpy(fileDisplayName,consumers.consumerName);                //used to get the user name and reuse it as the file name.
+	strcat(fileDisplayName,".txt");
+	
+	
+	
+	ifstream fileDisplay(fileDisplayName);
+	if (!fileDisplay) { 
+	cout<<"\n\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!";                                               //used to make sure that the file is opened if not stop execution.
+    cerr << "\n!      Unable to open file          !";
+    cout<<"\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n\n";
+    exit(1);   // call system to stop
+}
+cout<<"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ Cosumer info @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"<<endl<<endl<<endl<<endl;
+cout<<"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ Start @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"<<endl<<endl;    
+    while(!fileDisplay.eof()) {     // read data until the end of file is reached
+             getline(fileDisplay,tmp);   // get chunk of data
+            cout  << tmp <<"\n";
+                
+         
+}
+cout<<"\n\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ End @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"<<endl<<endl;  
+    fileDisplay.close();      
+
+    }
+
+
+
+///////////////////////////////////////////////////////////////////////// copyInfoTOFile ///////////////////////////////////////////////////////////////////////////
+
+
+
+
+void copyInfoTOFile()
+{
+		
+	
+	
+	 strcpy(fileName,consumers.consumerName);                //used to get the user name and reuse it as the file name.
+	 strcat(fileName,".txt");                                //used to concate the user name with the extention.
+	
+	ofstream consumerFile(fileName);                         
+	if (!consumerFile) { 
+	cout<<"\n\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!";                                               //used to make sure that the file is opened if not stop execution.
+    cerr << "\n!      Unable to open file          !";
+    cout<<"\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n\n";
+    exit(1);   // call system to stop
+    
+}
+
+    consumerFile<<"Name:";                                  //wirte name: to the file .
+	consumerFile<<consumers.consumerName;                   // copies  the consumer name to the file.          
+	consumerFile<<"\n";                                       //just make a dash.
+	
+
+consumerFile<<"\nDate of Last visit :";
+consumerFile<<consumers.dateOfVisit;
+consumerFile<<"\n";
+
+
+consumerFile<<"\nAddress :";                      //used to copy the address to the file;
+consumerFile<<consumers.address;
+consumerFile<<"\n";
+
+consumerFile<<"\nPhone number :";                         //used to copy the phone number to the file;
+consumerFile<<consumers.phoneNumber;
+consumerFile<<"\n";
+
+
+consumerFile<<"\n\n********************************** Products bought **********************************"<<endl<<endl;
+for (int i=0;i<counter;i++)
+{
+	
+	if (consumers.productName[i] != "0")                         //used to make sure that no empty results are copied.
+	{
+	consumerFile<<"\nProduct Name :";
+	consumerFile<<consumers.productName[i];
+	consumerFile<<"          ";
+	consumerFile<<"Product Price :";
+	consumerFile<<consumers.productPrice[i];
+	consumerFile<<"\n";
+	consumerFile<<"\n_______________________________________________________\n";
+}
+}
+consumerFile<<"\n\n******************************** Info about the bill ********************************"<<endl<<endl;
+consumerFile<<"Given discount :";
+consumerFile<<discount;
+consumerFile<<" %";
+consumerFile<<"\n";
+consumerFile<<"\nYour total (with discount if there is one ) is :";
+consumerFile<<total;
+consumerFile<<"\n";
+consumerFile<<"\nThe average of price of items bought  is :";
+consumerFile<<avgPrice;
+consumerFile<<"\n";
+if (maxi > 0)
+{
+consumerFile<<"\nThe most expensive item is  :";              //used to most and least expensive to the file.
+consumerFile<<maxii;
+consumerFile<<"    by the price of :";
+consumerFile<<maxi;
+consumerFile<<"\n";
+}
+if (mini > 0)
+{
+consumerFile<<"\nThe least expensive item is :";
+consumerFile<<minii;
+consumerFile<<"    by the price of :";
+consumerFile<<mini;
+}
+
+consumerFile.close();
+cout<<"\n///////////////////////////////////////////////";
+cout<<"\n/    Info successfully copied to a file      /";
+cout<<"\n/////////////////////////////////////////////";
+}
+
+
+
+///////////////////////////////////////////////////////////////////////// dislaySpecifiInfoFile ///////////////////////////////////////////////////////////////////////////
+
+
+
+
+void dislaySpecifiInfoFile(char NameToSearch[])
+{ 	system("cls");
+	
+	r:\
+	cout<<"\n_______________________________________________\n";
+	cout<<" Enter the name you wish to search for      ";	                //used to get the user name and reuse it as the file name.
+	cout<<"\n_______________________________________________\n";
+	cin>>NameToSearch;
+	cout<<"\n-----------------------------------------------\n\n";
+
+
+	strcat(NameToSearch,".txt");
+	
+	ifstream fileDisplay(NameToSearch);
+	if (!fileDisplay) {                                                //used to make sure that the file is opened if not stop excution.
+	cout<<"\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!";
+    cout<<"\n!   Unable to open file  check the name you entered if correct or not  !";
+    cout<<"\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!";
+    goto r;
+}
+    cout<<"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ Cosumer info @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"<<endl<<endl<<endl<<endl;
+cout<<"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ Start @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"<<endl<<endl;   
+    while(!fileDisplay.eof()) {     // read data until the end of file is reached
+             getline(fileDisplay,tmp);   // get chunk of data
+            cout  << tmp <<"\n";
+            
+                 
+}
+cout<<"\n\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ End @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"<<endl<<endl; 
+
+ fileDisplay.close();
+
+}
+
+
+
+///////////////////////////////////////////////////////////////////////// recordOfConsumers ///////////////////////////////////////////////////////////////////////////
+
+
+
+
+void recordOfConsumers()
+{
+		
+	ofstream filesRecord;
+	filesRecord.open("fileOfConsumers.txt" ,ios::app|ios::out|ios::in);               
+		if (!filesRecord) {
+			
+   cout<<"\n\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!";                                               //used to make sure that the file is opened if not stop execution.
+    cerr << "\n!      Unable to open file          !";
+    cout<<"\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n\n";
+   // exit(1);   // call system to stop
+}
+
+     filesRecord<<consumers.consumerName;
+     filesRecord<<endl;
+     
+     filesRecord.close();
+     
+     cout<<"\n\n////////////////////";
+     cout<<"\n/   Name copied    /";
+     cout<<"\n///////////////////";
+	
+}
+
+
+
+
+///////////////////////////////////////////////////////////////////////// displayRecordsFile ///////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+void displayRecordsFile()
+{
+
+	cout<<"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ Consumer Record @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"<<endl<<endl;
+	
+	ifstream recordfileDisplay("fileOfConsumers.txt");
+	if (!recordfileDisplay) {                                                //used to make sure that the file is opened if not stop execution.
+    cout<<"\n\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!";                                               //used to make sure that the file is opened if not stop execution.
+    cerr << "\n!      Unable to open file          !";
+    cout<<"\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n\n";
+    exit(1);   // call system to stop
+}
+
+    
+    while(!recordfileDisplay.eof()) {     // read data until the end of file is reached
+             getline(recordfileDisplay,tmp);   // get chunk of data
+            cout  <<"\n"<< tmp ;
+            cout<<"\n";
+            
+        
+}
+recordfileDisplay.close();	
+}
+
+
+
+///////////////////////////////////////////////////////////////////////// deleteAllConsumersFiles ///////////////////////////////////////////////////////////////////////////
+
+
+
+
+void deleteAllConsumersFiles()
+{
+	string FilesToRemove;
+	
+	ifstream recordfileDisplay("fileOfConsumers.txt");
+	
+	
+	if (!recordfileDisplay) {                                                //used to make sure that the file is opened if not stop execution.
+    cout<<"\n\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!";                                               //used to make sure that the file is opened if not stop execution.
+    cerr << "\n!      Unable to open file          !";
+    cout<<"\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n\n";
+    exit(1);                                                    // call system to stop
+}
+
+while(!recordfileDisplay.eof())       
+{
+	getline(recordfileDisplay,FilesToRemove);
+	FilesToRemove.append(".txt");                                   //.append is used like strcat for c-string .
+	remove(FilesToRemove.c_str());                               //.c_str() is used to convert string to char
+	
+}
+
+
+recordfileDisplay.close();
+cout<<"\n\n////////////////////////////////////////////////";
+cout<<"\n/      Deleting all consumers data            /";
+cout<<"\n//////////////////////////////////////////////";
+cout<<"\n............."<<endl;
+cout<<".........."<<endl;
+cout<<"......."<<endl;
+cout<<"....."<<endl;
+cout<<"..."<<endl;
+cout<<"."<<endl;
+cout<<"Done !";
+}
+
+
+
+
+///////////////////////////////////////////////////////////////////////// clearRecord ///////////////////////////////////////////////////////////////////////////
+
+
+
+void clearRecord()
+{
+	ofstream recordDataDeleter("fileOfConsumers.txt");
+	recordDataDeleter.close();
+}
+
+
+
+///////////////////////////////////////////////////////////////////////// deleteSpecifiRecord ///////////////////////////////////////////////////////////////////////////
+
+
+
+
+string deleteSpecifiRecord(string NameToDelete)
+{
+	
+	string OldNameToDelete;
+
+	system("cls");
+	
+	cout<<"\n_______________________________________________\n";
+	cout<<" Enter the consumer name you wish to delete       ";	                //used to get the user name and reuse it as the file name.
+	cout<<"\n_______________________________________________\n";
+	cin>>NameToDelete;
+	cout<<"\n-----------------------------------------------\n\n";
+		OldNameToDelete=NameToDelete;                                     //used to take a copy of the mame before editing to return it.
+	NameToDelete.append(".txt");
+	remove(NameToDelete.c_str());                                            //used to delete the file with the name.
+	
+	cout<<"\n\n////////////////////";
+     cout<<"\n/   info deleted   /";
+     cout<<"\n////////////////////";
+     
+     return OldNameToDelete;                                                  //returns the name to use it in updating the record.
+	
+}
+
+
+
+///////////////////////////////////////////////////////////////////////// updateRecordAfterDelete ///////////////////////////////////////////////////////////////////////////
+                                                                                                                  
+
+
+void updateRecordAfterDelete(string NameToDelete)
+{
+	ifstream updateRecord;
+	
+	ofstream tempFile;
+	string temp;
+	updateRecord.open("fileOfConsumers.txt");
+	tempFile.open("temp.txt");
+	
+	while(!updateRecord.eof())                                        //used to reove the deleted name from the record by making a temproray file and copying all name eccept the deleted name.
+	{
+		updateRecord>>temp;
+		if (temp != NameToDelete)
+		{
+		tempFile<<temp;
+		tempFile<<endl;
+	}
+	}
+	updateRecord.close();
+	tempFile.close();
+	remove("fileOfConsumers.txt");
+	rename("temp.txt","fileOfConsumers.txt");
+	
+}
